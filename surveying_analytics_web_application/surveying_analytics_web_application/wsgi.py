@@ -1,5 +1,5 @@
 """
-WSGI config for Surveying_Analytics_Tool project.
+WSGI config for surveying_analytics_web_application project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Surveying_Analytics_Tool.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'surveying_analytics_web_application.settings')
 
 application = get_wsgi_application()
