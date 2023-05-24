@@ -9,7 +9,7 @@ def request_file():
         f.write(requests.get("https://www.rvd.gov.hk/doc/en/statistics/his_data_4.xls").content)
 
 
-def formuate_data():
+def formulate_market_data():
     excel_file = pd.ExcelFile("./Private Property Price Index.xls")
     df = pd.read_excel(excel_file, sheet_name="Monthly  按月")
 
@@ -25,7 +25,25 @@ def formuate_data():
     print(df.to_markdown())
     return df
 
+#define a function that showcases a list of excel data
+def formulate_housing_data():
+    xlsx = pd.read_excel("./Raw Source.xlsx", sheet_name = None)
+    for num_tab in range(len(xlsx)):
+       df = pd.read_excel("./Raw Source.xlsx",sheet_name = num_tab)
+       df.drop(columns="Price(M)($)")
+       df["Class"] = pd.cut(df['Area'], bins = [0,39.9,69.9,99.9,159.9,np.inf], labels = ['A','B','C','D','E'])
+       print(df.to_markdown())
+    return xlsx
+    
+    
+        
+        
+    
+    
 
 if __name__ == "__main__":
-    # requestFile()
-    df = formuate_data()
+    #request_file()
+    # df = formulate_market_data()
+    formulate_housing_data()
+    
+
