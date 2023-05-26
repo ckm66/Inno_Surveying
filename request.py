@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import numpy as np
+import datetime 
 
 
 def request_file():
@@ -28,22 +29,41 @@ def formulate_market_data():
 #define a function that showcases a list of excel data
 def formulate_housing_data():
     xlsx = pd.read_excel("./Raw Source.xlsx", sheet_name = None)
+    list = []
     for num_tab in range(len(xlsx)):
        df = pd.read_excel("./Raw Source.xlsx",sheet_name = num_tab)
        df.drop(columns="Price(M)($)")
+       df["Date"] = pd.to_datetime[df["PASP"]]
        df["Class"] = pd.cut(df['Area'], bins = [0,39.9,69.9,99.9,159.9,np.inf], labels = ['A','B','C','D','E'])
        print(df.to_markdown())
-    return xlsx
+       list.append(df)
+    return list
+
+# Define a function that
+
     
     
-        
+# Price adjusted according to residential price index (price * price index / 100)  
+"""def adjust(record, PPPI):
+     n_record = []
+     for tab in record:
+        tab["Adjusted Price"] = tab.apply(lambda row: match(row["Class"], row["Date"], PPPI))
+        n_record.append(tab) """
+    
+    
+    
+    
+    
+    
+    
         
     
     
 
 if __name__ == "__main__":
     #request_file()
-    # df = formulate_market_data()
-    formulate_housing_data()
+    price_index_Df = formulate_market_data()
+    record = formulate_housing_data()
+    
     
 
