@@ -37,24 +37,26 @@ def formulate_trade_record():
     return list
 
   
-def adjustment(record, price_index_df):
-    row_num = price_index_df.loc[price_index_df['Date'].year == record["PASP"].year & price_index_df['Date'].month == record["PASP"].month].index[0]
-    value = price_index_df.loc[row_num, record["Class"]]
-    return record["Price($)"] * value / 100
+def adjustment(trade_record, price_index_df):
+    PASP_Date = trade_record["PASP"]
+    reference_row_no = price_index_df.loc[price_index_df['Date'].year == PASP_Date.year & price_index_df['Date'].month == PASP_Date.month].index[0]
+    value = price_index_df.loc[reference_row_no, trade_record["Class"]]
+    return trade_record["Price($)"] * value / 100
     
     
 # Price adjusted according to residential price index (price * price index / 100)  
 def adjust_time(trade_record_list, price_index_df):
-    n_record = []
+    time_adjusted_record_list  = []
     for df in trade_record_list:
         df["Adjusted Price"] = df.apply(adjustment ,args = (price_index_df,),axis = 1)
-        n_record.append(df)
-    return n_record
+        time_adjusted_record_list.append(df)
+    return time_adjusted_record_list
              
 if __name__ == "__main__":
     #request_file()
     price_index_df = formulate_price_index()
     trade_record_list = formulate_trade_record()
+    trade_record_list = adjust_time(trade_record_list, price_index_df)
     
     
 
