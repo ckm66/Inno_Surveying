@@ -10,7 +10,7 @@ def request_file():
         f.write(requests.get("https://www.rvd.gov.hk/doc/en/statistics/his_data_4.xls").content)
 
 
-def formulate_market_data():
+def formulate_price_index():
     excel_file = pd.ExcelFile("./Private Property Price Index.xls")
     df = pd.read_excel(excel_file, sheet_name="Monthly  按月")
 
@@ -23,53 +23,38 @@ def formulate_market_data():
     df['Date'] = pd.to_datetime(df[['Year', 'Month']].assign(DAY = 1))
     df.drop(columns = ['Year', 'Month'], inplace = True)
     df = df.reindex(columns=['Date', 'A', 'B', 'C', 'D', 'E'])
-    print(df.to_markdown())
     return df
 
 #define a function that showcases a list of excel data
-def formulate_housing_data():
+def formulate_trade_record():
     xlsx = pd.read_excel("./Raw Source.xlsx", sheet_name = None)
     list = []
     for num_tab in range(len(xlsx)):
        df = pd.read_excel("./Raw Source.xlsx",sheet_name = num_tab)
-       df.drop(columns="Price(M)($)")
+       df.drop(columns="Price(M)($)", inplace = True)
        df["Class"] = pd.cut(df['Area'], bins = [0,39.9,69.9,99.9,159.9,np.inf], labels = ['A','B','C','D','E'])
-    #    print(df.to_markdown())
        list.append(df)
     return list
 
-# 
-def adjustment(row,PPPI):
-    price = row["Price($)"]
-    date = row["PASP"]
-    date_month =  date.month
-    date_year = date.year
-    dt = datetime.datetime(date_year,date_month,1)
-    character = row["Class"]
-    row_num = PPPI.loc[PPPI['Date'] == dt].index[0]
-    value = PPPI.loc[row_num,character]
-    return price * value / 100
+  
+def adjustment(record, price_index_df):
+    row_num = price_index_df.loc[price_index_df['Date'].year == record["PASP"].year & price_index_df['Date'].month == record["PASP"].month].index[0]
+    value = price_index_df.loc[row_num, record["Class"]]
+    return record["Price($)"] * value / 100
     
     
 # Price adjusted according to residential price index (price * price index / 100)  
-def adjust(record, PPPI):
-     n_record = []
-     for df in record:
-         df["Adjusted Price"] = df.apply(adjustment ,args = (PPPI,),axis = 1)
-         n_record.append(df)
-     return n_record
-             
-# Provide evidence for coefficient 
-def prove(record, coeff):
-    list = []
-    return list
+def adjust_time(trade_record_list, price_index_df):
+    n_record = []
+    for df in trade_record_list:
+        df["Adjusted Price"] = df.apply(adjustment ,args = (price_index_df,),axis = 1)
+        n_record.append(df)
+    return n_record
              
 if __name__ == "__main__":
     #request_file()
-    price_index_Df = formulate_market_data()
-    record = formulate_housing_data()
-    n_rec = adjust(record, price_index_Df)
-    print(n_rec)
+    price_index_df = formulate_price_index()
+    trade_record_list = formulate_trade_record()
     
     
 
