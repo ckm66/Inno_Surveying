@@ -38,8 +38,7 @@ def formulate_trade_record():
 
   
 def adjustment(trade_record, price_index_df):
-    PASP_Date = trade_record["PASP"]
-    reference_row_no = price_index_df.loc[price_index_df['Date'].year == PASP_Date.year & price_index_df['Date'].month == PASP_Date.month].index[0]
+    reference_row_no = price_index_df.loc[price_index_df['Date'].year == trade_record["PASP"].year & price_index_df['Date'].month == trade_record["PASP"].month].index[0]
     value = price_index_df.loc[reference_row_no, trade_record["Class"]]
     return trade_record["Price($)"] * value / 100
     
