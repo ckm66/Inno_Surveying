@@ -33,23 +33,28 @@ def formulate_housing_data():
     for num_tab in range(len(xlsx)):
        df = pd.read_excel("./Raw Source.xlsx",sheet_name = num_tab)
        df.drop(columns="Price(M)($)")
-       df["Date"] = pd.to_datetime[df["PASP"]]
        df["Class"] = pd.cut(df['Area'], bins = [0,39.9,69.9,99.9,159.9,np.inf], labels = ['A','B','C','D','E'])
-       print(df.to_markdown())
+    #    print(df.to_markdown())
        list.append(df)
     return list
 
 # Define a function that
-
+def adjustment(row):
+    date = row["PASP"]
+    date_month = date.month
+    date_year = date.year
+    return date.month
     
     
 # Price adjusted according to residential price index (price * price index / 100)  
-"""def adjust(record, PPPI):
+def adjust(record):
      n_record = []
-     for tab in record:
-        tab["Adjusted Price"] = tab.apply(lambda row: match(row["Class"], row["Date"], PPPI))
-        n_record.append(tab) """
-    
+     
+     for df in record:
+         df["adjusted_price"] = df.apply(adjustment, axis = 1)
+         n_record.append(df)
+     return n_record
+         
     
     
     
@@ -64,6 +69,9 @@ if __name__ == "__main__":
     #request_file()
     price_index_Df = formulate_market_data()
     record = formulate_housing_data()
+    print(record)
+    n_rec = adjust(record)
+    print(n_rec)
     
     
 
