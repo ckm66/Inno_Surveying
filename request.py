@@ -51,26 +51,19 @@ def adjustment(row,PPPI):
     return price * value / 100
     
     
-    
 # Price adjusted according to residential price index (price * price index / 100)  
 def adjust(record, PPPI):
      n_record = []
-     
      for df in record:
          df["Adjusted Price"] = df.apply(adjustment ,args = (PPPI,),axis = 1)
          n_record.append(df)
      return n_record
-         
-    
-    
-    
-    
-    
-    
-        
-    
-    
-
+             
+# Provide evidence for coefficient 
+def prove(record, coeff):
+    list = []
+    return list
+             
 if __name__ == "__main__":
     #request_file()
     price_index_Df = formulate_market_data()
