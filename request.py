@@ -41,17 +41,19 @@ def formulate_housing_data():
 # Define a function that
 def adjustment(row):
     date = row["PASP"]
-    date_month = date.month
+    date_month =  date.month
     date_year = date.year
-    return date.month
+    dt = datetime.datetime(date_year,date_month,1)
+    character = row["Class"]
+    
     
     
 # Price adjusted according to residential price index (price * price index / 100)  
-def adjust(record):
+def adjust(record, PPPI):
      n_record = []
      
      for df in record:
-         df["adjusted_price"] = df.apply(adjustment, axis = 1)
+         df["datetime"] = df.apply(adjustment ,axis = 1)
          n_record.append(df)
      return n_record
          
@@ -70,7 +72,7 @@ if __name__ == "__main__":
     price_index_Df = formulate_market_data()
     record = formulate_housing_data()
     print(record)
-    n_rec = adjust(record)
+    n_rec = adjust(record, price_index_Df)
     print(n_rec)
     
     
