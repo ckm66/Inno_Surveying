@@ -57,7 +57,7 @@ def adjust(record, PPPI):
      n_record = []
      
      for df in record:
-         df["adjusted price"] = df.apply(adjustment ,args = (PPPI,),axis = 1)
+         df["Adjusted Price"] = df.apply(adjustment ,args = (PPPI,),axis = 1)
          n_record.append(df)
      return n_record
          
@@ -75,7 +75,6 @@ if __name__ == "__main__":
     #request_file()
     price_index_Df = formulate_market_data()
     record = formulate_housing_data()
-    print(record)
     n_rec = adjust(record, price_index_Df)
     print(n_rec)
     
