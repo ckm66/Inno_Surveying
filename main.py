@@ -23,6 +23,8 @@ def formulate_price_index():
     df = df.reindex(columns=['Date', 'A', 'B', 'C', 'D', 'E'])
     return df
 
+def 
+
 def trade_record_validation():
     xlsx = pd.read_excel("./Raw Source.xlsx", sheet_name = None)
     for num_tab in range(len(xlsx)):
