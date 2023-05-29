@@ -49,8 +49,6 @@ def price_adjustment(trade_record, price_index_reference_table):
 #define a function that showcases a list of excel data
 def formulate_trade_record(price_index_reference_table):
     trade_record_list = []
-    view_list  = set()
-    building_name_list = set
     
     xlsx = pd.read_excel("./Raw Source.xlsx", sheet_name = None)
     for num_tab in range(len(xlsx)):
