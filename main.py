@@ -33,14 +33,14 @@ def trade_record_validation():
             raise ValueError(f"Sheet {num_tab} has more than one building name or address")
     return None
 
-def adjustment(trade_record, price_index_reference_table):
+def time_index(trade_record, price_index_reference_table):
     PASP_Date = trade_record['PASP'].replace(day = 1)
     reference_row_no = price_index_reference_table.loc[price_index_reference_table['Date'] == PASP_Date].index[0]
     value = price_index_reference_table.loc[reference_row_no, trade_record["Class"]]
     return value
 
 
-def price_adjustment(trade_record, price_index_reference_table):
+def unit_rate(trade_record, price_index_reference_table):
     PASP_Date = trade_record['PASP'].replace(day = 1)
     reference_row_no = price_index_reference_table.loc[price_index_reference_table['Date'] == PASP_Date].index[0]
     value = price_index_reference_table.loc[reference_row_no, trade_record["Class"]]
@@ -56,7 +56,8 @@ def formulate_trade_record(price_index_reference_table):
             
         df.drop(columns="Price(M)($)", inplace = True)
         df["Class"] = pd.cut(df['Area'], bins = [0,39.9,69.9,99.9,159.9,np.inf], labels = ['A','B','C','D','E'])
-        df["Time Index"] = df.apply(adjustment ,args = (price_index_reference_table,),axis = 1)
+        df["Time Index"] = df.apply(time_index ,args = (price_index_reference_table,),axis = 1)
+        df["Unit Rate"] = df.apply(unit_rate ,args = (price_index_reference_table,),axis = 1)
 
         trade_record_list.append(df)
     return trade_record_list
