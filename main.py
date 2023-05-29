@@ -23,15 +23,26 @@ def formulate_price_index():
     df = df.reindex(columns=['Date', 'A', 'B', 'C', 'D', 'E'])
     return df
 
-def 
 
 def trade_record_validation():
     xlsx = pd.read_excel("./Raw Source.xlsx", sheet_name = None)
+    building_names_list = []
+    views_list = []
     for num_tab in range(len(xlsx)):
         df = pd.read_excel("./Raw Source.xlsx",sheet_name = num_tab)
         if (len(df['Building Name'].unique()) != 1 and len(df['Address'].unique()) != 1):
             raise ValueError(f"Sheet {num_tab} has more than one building name or address")
-    return None
+        
+        if df['Building Name'].unique()[0] in building_names_list:
+            raise ValueError(f"Sheet {num_tab} has more than one building name or address")
+        building_names_list.append(df['Building Name'].unique()[0].replace(u'\xa0', u'').strip())
+        
+        for view in df['View'].unique():
+            view = view.replace(u'\xa0', u'').strip()
+            if view in views_list:
+                continue
+            views_list.append(view)
+    return building_names_list, views_list
 
 def time_index(trade_record, price_index_reference_table):
     PASP_Date = trade_record['PASP'].replace(day = 1)
@@ -72,12 +83,12 @@ def collect_cofficiency(view_list, building_name_list):
     building_dictionary = {input(f"Please input the {building_name} cofficency base 100)") for building_name in building_name_list}
     return age_cofficiency,size_cofficiency, floor_cofficiency, view_dictionary, headroom_cofficency, building_dictionary
 
-#def algorithm(floor_cofficiency, view_dictionary, headroom_cofficency, building_dictionary):
+# def algorithm(floor_cofficiency, view_dictionary, headroom_cofficency, building_dictionary):
 
 
 if __name__ == "__main__":
     price_index_reference_table = formulate_price_index()
-    trade_record_validation()
+    building_names_list, views_list = trade_record_validation()
     trade_records_list = formulate_trade_record(price_index_reference_table)
-    age_cofficiency,size_cofficiency, floor_cofficiency, view_dictionary, headroom_cofficency, building_dictionary = collect_cofficiency(views_list, building_names_list)
+    # age_cofficiency,size_cofficiency, floor_cofficiency, view_dictionary, headroom_cofficency, building_dictionary = collect_cofficiency(views_list, building_names_list)
 
