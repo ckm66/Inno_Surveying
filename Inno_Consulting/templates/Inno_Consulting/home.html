@@ -8,15 +8,33 @@
 </head>
 
 <body>
-    <h1>Home page</h1>
+<h1>Home page</h1>
 
-    <form action="">
-        <p>Range: <input type="text" name="range" size="15"></p>
+<form action="">
+    <p>Range: <input type="text" name="range" size="15"></p>
 
-        <p>Trade record file: <input type="file" id="trade-record" name="trade-record"></p>
+    <p>Trade record file: <input type="file" id="trade-record" name="trade-record"></p>
+    <div id="dropzone">
+        <p>Drag and drop a file here</p>
+        <input type="file" id="fileInput" name="fileInput" style= "display: none;">
+    </div>
+    <input type="submit">
+</form>
+<script>
+const zone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+zone.addEventListener('dragover', (event)=>{
+    event.preventDefault();
+    zone.style.backgroundColor = 'grey';
+})
+zone.addEventListener('drop', (event)=>{
+    event.preventDefault();
+    var filee = event.dataTransfer.files;
+    fileInput.files = filee;
+    zone.style.backgroundColor = 'white';
+})
 
-        <input type="submit">
-    </form>
+</script>
 </body>
 
 </html>
