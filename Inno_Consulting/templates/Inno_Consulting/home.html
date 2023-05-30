@@ -27,6 +27,10 @@ zone.addEventListener('dragover', (event)=>{
     event.preventDefault();
     zone.style.backgroundColor = 'grey';
 })
+zone.addEventListener('dragleave', (event)=>{
+    event.preventDefault();
+    zone.style.backgroundColor = 'white';
+})
 zone.addEventListener('drop', (event)=>{
     event.preventDefault();
     var filee = event.dataTransfer.files;
