@@ -4,19 +4,19 @@
 <head>
     <meta charset="utf-8">
     <title>Home page</title>
-    <link rel='stylesheet' href='styles.css'>
+    <link rel='stylesheet' type='text/css' href='styles.css'>
 </head>
 
 <body>
-<h1>Home page</h1>
+<h1 style= "background-color: palegreen;">Home page</h1>
 
 <form action="">
     <p>Range: <input type="text" name="range" size="15"></p>
 
-    <p>Trade record file: <input type="file" id="trade-record" name="trade-record"></p>
-    <div id="dropzone">
-        <p>Drag and drop a file here</p>
-        <input type="file" id="fileInput" name="fileInput" style= "display: none;">
+    <!--<p>Trade record file: <input type="file" id="trade-record" name="trade-record"></p>-->
+    <div id="dropzone" style="height:280px; border-style: dotted;">
+        <p>Drag and drop a file here, or you can click the upload button to upload file</p>
+        <input type="file" id="fileInput" name="fileInput" style= "display: block;">
     </div>
     <input type="submit">
 </form>
@@ -35,6 +35,9 @@ zone.addEventListener('drop', (event)=>{
     event.preventDefault();
     var filee = event.dataTransfer.files;
     fileInput.files = filee;
+    /*const para = document.createElement("p");
+    para.innerText = filee.getAsFile().name;
+    zone.appendChild(para);*/
     zone.style.backgroundColor = 'white';
 })
 
